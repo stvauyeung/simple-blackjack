@@ -1,0 +1,23 @@
+<div class="row-fluid">
+	<div class="span2">
+    <img src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRlhT0hwkrhRMYj7bAvpq7whCLLvQyy5t0OqsRBDuizSVSUfCkE" class="img-circle">
+  </div>
+  <div class="span10">
+    <h1>Allright <%= session[:name] %>, let's play blackjack! </h1>
+  </div>
+</div>
+<div class="row-fluid">
+  <br>
+  <h2>Dealer Cards</h2>
+    <ul>
+      <% session[:dealer_cards].each do |card| %>
+        <li><%= card.to_s %></li>
+      <% end %>
+    </ul>
+  <h2><%= session[:name] %>'s Cards</h2>
+    <ul>
+      <% session[:player_cards].each do |card| %>
+        <li><%= card.to_s %></li>
+      <% end %>
+    </ul>
+</div>
