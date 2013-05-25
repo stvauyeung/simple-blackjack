@@ -3,21 +3,37 @@
     <img src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRlhT0hwkrhRMYj7bAvpq7whCLLvQyy5t0OqsRBDuizSVSUfCkE" class="img-circle">
   </div>
   <div class="span10">
-    <h1>Allright <%= session[:name] %>, let's play blackjack! </h1>
+    <h1>Goodluck <%= session[:player_name] %>!</h1>
   </div>
 </div>
+<br>
 <div class="row-fluid">
-  <br>
-  <h2>Dealer Cards</h2>
+  <div class="span6">
+    <p>Dealer Cards</p>
     <ul>
       <% session[:dealer_cards].each do |card| %>
         <li><%= card.to_s %></li>
       <% end %>
     </ul>
-  <h2><%= session[:name] %>'s Cards</h2>
+  </div>
+  <div class="span6">
+    <p><%= session[:player_name] %>'s Cards</p>
     <ul>
       <% session[:player_cards].each do |card| %>
         <li><%= card.to_s %></li>
       <% end %>
     </ul>
+  </div>
+</div>
+<br>
+<div class="row-fluid">
+  <form class="form-inline" action="/game" method="post">
+    <h3>What would you like to do?</h3>
+    <div class="span5 offset1">
+      <button class="btn btn-success btn-block" type="submit" name="player_action" value="hit">HIT</button>
+    </div>
+    <div class="span5">
+      <button class="btn btn-danger btn-block" type="submit" name="player_action" value="stay">STAY</button>
+    </div>
+  </form>
 </div>
