@@ -3,7 +3,7 @@
     <img src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRlhT0hwkrhRMYj7bAvpq7whCLLvQyy5t0OqsRBDuizSVSUfCkE" class="img-circle">
   </div>
   <div class="span10">
-    <h1>Goodluck <%= session[:player_name] %>!</h1>
+    <h1>Dealer plays..</h1>
   </div>
 </div>
 <br>
@@ -24,16 +24,4 @@
       <% end %>
     </p>
   </div>
-</div>
-<br>
-<div class="row-fluid">
-  <form class="form-inline" action="/game" method="post">
-    <h3>What would you like to do?</h3>
-    <div class="span5 offset1">
-      <button class="btn btn-success btn-block" type="submit" name="player_action" value="hit">HIT</button>
-    </div>
-    <div class="span5">
-      <button class="btn btn-danger btn-block" type="submit" name="player_action" value="stay">STAY</button>
-    </div>
-  </form>
 </div>
