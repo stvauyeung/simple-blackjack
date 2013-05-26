@@ -8,32 +8,38 @@
 </div>
 <br>
 <div class="row-fluid">
-  <div class="span6">
-    <h4>Dealer Cards</h4>
+  <div class="card-table span5 offset1">
+    <p><h4>Dealer Cards</h4></p>
     <p>
       <% session[:dealer_cards].each do |card| %>
-        <%= to_image(card) %>
+        <%= card_image(card) %>
       <% end %>
     </p>
   </div>
-  <div class="span6">
-    <h4><%= session[:player_name] %>'s Cards | Total Value: <%= calculate_total(session[:player_cards]) %></h4>
+  <div class="card-table span5">
+    <p>
+      <h4><%= session[:player_name] %>'s Cards | Total Value: <%= calculate_total(session[:player_cards]) %></h4>
+    </p>
     <p>
       <% session[:player_cards].each do |card| %>
-        <%= to_image(card) %>
+        <%= card_image(card) %>
       <% end %>
     </p>
   </div>
 </div>
 <br>
+<% if @player_buttons %>
 <div class="row-fluid">
-  <form class="form-inline" action="/game" method="post">
     <h3>What would you like to do?</h3>
     <div class="span5 offset1">
-      <button class="btn btn-success btn-block" type="submit" name="player_action" value="hit">HIT</button>
+      <form action="/game/player/hit" method="post">
+        <button class="btn btn-success btn-block" type="submit" value="hit">HIT</button>
+      </form>
     </div>
     <div class="span5">
-      <button class="btn btn-danger btn-block" type="submit" name="player_action" value="stay">STAY</button>
+      <form action="/game/player/stay" method="post">
+        <button class="btn btn-danger btn-block" type="submit" value="stay">STAY</button>
+      </form>
     </div>
-  </form>
 </div>
+<% end %>
