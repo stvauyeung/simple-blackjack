@@ -9,17 +9,22 @@
 <br>
 <div class="row-fluid">
   <div class="card-table span5 offset1">
-    <p><h4>Dealer Cards</h4></p>
-    <p>
-      <% session[:dealer_cards].each do |card| %>
-        <%= card_image(card) %>
+    <h4 class="table">Dealer Cards</h4>
+      <% if @player_buttons %>
+        <p>
+          <img class="card-image" src="/images/cards2/cover.png">
+          <%= card_image(session[:dealer_cards][1]) %>
+        </p>
+      <% else %>
+        <p>
+          <% session[:dealer_cards].each do |card| %>
+          <%= card_image(card) %>
+          <% end %>
+        </p>
       <% end %>
-    </p>
   </div>
   <div class="card-table span5">
-    <p>
-      <h4><%= session[:player_name] %>'s Cards | Total Value: <%= calculate_total(session[:player_cards]) %></h4>
-    </p>
+    <h4 class="table"><%= session[:player_name] %>'s Cards | Total Value: <%= calculate_total(session[:player_cards]) %></h4>
     <p>
       <% session[:player_cards].each do |card| %>
         <%= card_image(card) %>
@@ -28,18 +33,28 @@
   </div>
 </div>
 <br>
+
 <% if @player_buttons %>
 <div class="row-fluid">
     <h3>What would you like to do?</h3>
     <div class="span5 offset1">
       <form action="/game/player/hit" method="post">
-        <button class="btn btn-success btn-block" type="submit" value="hit">HIT</button>
+        <button class="btn btn-success btn-block" type="submit">HIT</button>
       </form>
     </div>
     <div class="span5">
       <form action="/game/player/stay" method="post">
-        <button class="btn btn-danger btn-block" type="submit" value="stay">STAY</button>
+        <button class="btn btn-danger btn-block" type="submit">STAY</button>
       </form>
     </div>
 </div>
+<% end %>
+
+<% if @dealer_buttons %>
+  <div class="row-fluid">
+    <h3>Dealer has <%= calculate_total(session[:dealer_cards]) %></h3>
+      <form action="/game/dealer/hit" method="post">
+        <input class="btn btn-primary" type="submit" value="Click to see dealer card &rarr;">
+      </form>
+  </div>
 <% end %>

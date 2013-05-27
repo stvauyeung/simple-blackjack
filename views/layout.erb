@@ -6,17 +6,17 @@
     <link rel="stylesheet" href="/application.css">
   </head>
   <body style="padding-top: 50px;">
-
     <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
-        <div class="container">
-            <ul class="nav">
-              <li><a href="/form"><i class="icon-glass"></i> Simple Blackjack</a></li>
-            </ul>
+        <div class="navbar-fixed">
+          <a class="brand">Simple Blackjack</a>
+        <div class="pull-right">
+          <a href="/form" class="btn btn-primary">Enter Name</a>
+          <a href="/game" class="btn btn-primary">Deal Again</a>
         </div>
       </div>
+      </div>
     </div>
-
   <div class="container">
     <% if @error %>
       <div class="alert alert-error"><%=@error%></div>

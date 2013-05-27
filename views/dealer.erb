@@ -10,11 +10,18 @@
 <div class="row-fluid">
   <div class="span6">
     <h4>Dealer Cards</h4>
+    <% if @player_buttons = true %>
+    <p>
+      <img src="/images/cards/cover.jpg">
+      <%= to_image(session[:dealer_cards][1]) %>
+    </p>
+    <% else %>
     <p>
       <% session[:dealer_cards].each do |card| %>
         <%= to_image(card) %>
       <% end %>
     </p>
+    <% end %>
   </div>
   <div class="span6">
     <h4><%= session[:player_name] %>'s Cards | Total Value: <%= calculate_total(session[:player_cards]) %></h4>
