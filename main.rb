@@ -3,6 +3,10 @@ require 'sinatra'
 
 set :sessions, true
 
+BLACKJACK = 21
+DEALER_MAX_HIT = 17
+POT_START_AMT = 500
+
 helpers do
   def calculate_total(cards)
     arr = cards.map{|element| element[1]}
@@ -17,7 +21,7 @@ helpers do
     end
 
     arr.select{|element| element == 'ace'}.count.times do
-      break if total <= 21
+      break if total <= BLACKJACK
       total -= 10
     end
 
@@ -34,6 +38,26 @@ helpers do
 
     "<img src='/images/cards2/#{suit}_#{card[1]}.png' alt='#{card[1]} of #{suit}' class='card-image'>"
   end
+
+  def winner!(msg)
+    @player_buttons = false
+    @success = "<strong>Congratulations, #{session[:player_name]} wins.</strong> #{msg}"
+    @next_round = true
+    session[:player_pot] = session[:player_pot] + session[:bet_amount]
+  end
+
+  def loser!(msg)
+    @player_buttons = false
+    @error = "<strong>Sorry, #{session[:player_name]} loses.</strong> #{msg}"
+    @next_round = true
+    session[:player_pot] = session[:player_pot] - session[:bet_amount]
+  end
+
+  def push!(msg)
+    @player_buttons = false
+    @error = "<strong>It's a push.</strong> #{msg}"
+    @next_round = true
+  end
 end
 
 before do
@@ -49,6 +73,7 @@ get '/' do
 end
 
 get '/form' do
+  session[:player_pot] = POT_START_AMT
   erb :form
 end
 
@@ -59,11 +84,33 @@ post '/form' do
   end
 
     session[:player_name] = params[:player_name]
-    redirect '/game'
+    redirect '/bet'
 end
 
+get '/bet' do
+  session[:bet_amount] = nil
+  erb :bet
+end
+
+post '/bet' do
+  if params[:bet_amount].empty?
+    @error = "Bets must be placed before the deal"
+    halt erb(:bet)
+  elsif params[:bet_amount].nil?
+    @error = "Bet amount must be a number"
+    halt erb(:bet)
+  elsif params[:bet_amount].to_i > session[:player_pot]
+    @error = "Your bet exceeds the max amount"
+    halt erb(:bet)
+  end
+
+  session[:bet_amount] = params[:bet_amount].to_i
+  redirect '/game'
+end
 
 get '/game' do
+  session[:turn] = session[:player_name]
+
   if session[:player_name].nil? || session[:player_name].empty?
     redirect '/form'
   end
@@ -80,8 +127,8 @@ get '/game' do
   session[:dealer_cards] << session[:deck].pop
   session[:player_cards] << session[:deck].pop
 
-  if calculate_total(session[:player_cards]) == 21
-    @success = "You hit blackjack!"
+  if calculate_total(session[:player_cards]) == BLACKJACK
+    winner!("You hit blackjack!")
     redirect '/game/dealer'
   end
 
@@ -91,12 +138,10 @@ end
 post '/game/player/hit' do
   session[:player_cards] << session[:deck].pop
 
-  if calculate_total(session[:player_cards]) > 21
-    @error = "Sorry, #{session[:player_name]} has busted."
-    @player_buttons = false
-  elsif calculate_total(session[:player_cards]) == 21
-    @success = "You hit twenty-one!"
-    @player_buttons = false
+  if calculate_total(session[:player_cards]) > BLACKJACK
+    loser!("#{session[:player_name]} busted at #{calculate_total(session[:player_cards])}.")
+  elsif calculate_total(session[:player_cards]) == BLACKJACK
+    redirect '/game/dealer'
   end
   
   erb :game
@@ -108,23 +153,16 @@ post '/game/player/stay' do
 end
 
 get '/game/dealer' do
+  session[:turn] = 'dealer'
   @player_buttons = false
 
   dealer_total = calculate_total(session[:dealer_cards])
 
-  if dealer_total == 21
-    @error = "Dealer hit twenty-one."
+  if dealer_total >= DEALER_MAX_HIT
     redirect '/game/compare'
-  elsif dealer_total > 21
-    redirect '/game/compare'
-  elsif dealer_total >= 17
-    # dealer stays
-    redirect '/game/compare'
-  else
-    # dealer hits
-    @dealer_buttons = true
   end
 
+  @dealer_buttons = true
   erb :game
 end
 
@@ -139,15 +177,19 @@ get '/game/compare' do
   player_total = calculate_total(session[:player_cards])
   dealer_total = calculate_total(session[:dealer_cards])
 
-  if dealer_total > 21
-    @success = "Dealer has busted."
+  if dealer_total > BLACKJACK
+     winner!("Dealer has busted.")
   elsif player_total < dealer_total
-    @error = "Sorry, dealer wins."
+    loser!("#{session[:player_name]} has #{player_total} to dealer's #{dealer_total}")
   elsif player_total > dealer_total
-    @success = "Congratulations, #{session[:player_name]} wins."
+    winner!("#{session[:player_name]} has #{player_total} to dealer's #{dealer_total}")
   else
-    @success = "Dealer and #{session[:player_name]} push."
+    push!("Dealer and #{session[:player_name]} both have #{player_total}.")
   end
 
   erb :game
+end
+
+get '/game_over' do
+  erb :game_over
 end

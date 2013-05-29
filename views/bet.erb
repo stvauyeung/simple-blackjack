@@ -1,0 +1,20 @@
+<div class="row-fluid">
+	<div class="span2">
+    <img src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRlhT0hwkrhRMYj7bAvpq7whCLLvQyy5t0OqsRBDuizSVSUfCkE" class="img-circle">
+  </div>
+  <div class="span10">
+    <h1>What would you like to bet <%= session[:player_name] %>?</h1>
+  </div>
+</div>
+
+<div class="row-fluid">
+  <br>
+  <br>
+  <form class="form-inline" action="/bet" method="post">
+    <fieldset class="span6 offset3">
+      <legend>Max bet: $<%= session[:player_pot] %></legend>
+          <input type="text" name="bet_amount" placeholder="Place your bet please">
+          <button type="submit" class="btn btn-primary">Place Bet</button>
+    </fieldset>
+  </form>
+</div>

@@ -10,26 +10,19 @@
 <div class="row-fluid">
   <div class="card-table span5 offset1">
     <h4 class="table">Dealer Cards</h4>
-      <% if @player_buttons %>
-        <p>
-          <img class="card-image" src="/images/cards2/cover.png">
-          <%= card_image(session[:dealer_cards][1]) %>
-        </p>
+    <% session[:dealer_cards].each_with_index do |card, i| %>
+      <% if session[:turn] != "dealer" && i == 0 %>
+        <img class="card-image" src="/images/cards2/cover.png">
       <% else %>
-        <p>
-          <% session[:dealer_cards].each do |card| %>
-          <%= card_image(card) %>
-          <% end %>
-        </p>
+        <%= card_image(card) %>
       <% end %>
+    <% end %>
   </div>
   <div class="card-table span5">
     <h4 class="table"><%= session[:player_name] %>'s Cards | Total Value: <%= calculate_total(session[:player_cards]) %></h4>
-    <p>
       <% session[:player_cards].each do |card| %>
         <%= card_image(card) %>
       <% end %>
-    </p>
   </div>
 </div>
 <br>
@@ -45,6 +38,22 @@
     <div class="span5">
       <form action="/game/player/stay" method="post">
         <button class="btn btn-danger btn-block" type="submit">STAY</button>
+      </form>
+    </div>
+</div>
+<% end %>
+
+<% if @next_round %>
+<div class="row-fluid">
+    <h3>Would you like to play again?</h3>
+    <div class="span4 offset2">
+      <form action="/bet" method="get">
+        <button class="btn btn btn-block" type="submit">YES</button>
+      </form>
+    </div>
+    <div class="span4">
+      <form action="/game_over" method="get">
+        <button class="btn btn btn-block" type="submit">NO</button>
       </form>
     </div>
 </div>
