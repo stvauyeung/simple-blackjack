@@ -66,7 +66,7 @@ end
 
 get '/' do
   if session[:player_name]
-    redirect '/game'
+    redirect '/bet'
   else
     redirect '/form'
   end
@@ -93,11 +93,8 @@ get '/bet' do
 end
 
 post '/bet' do
-  if params[:bet_amount].empty?
+  if params[:bet_amount].nil? || params[:bet_amount].to_i == 0
     @error = "Bets must be placed before the deal"
-    halt erb(:bet)
-  elsif params[:bet_amount].nil?
-    @error = "Bet amount must be a number"
     halt erb(:bet)
   elsif params[:bet_amount].to_i > session[:player_pot]
     @error = "Your bet exceeds the max amount"
@@ -128,7 +125,6 @@ get '/game' do
   session[:player_cards] << session[:deck].pop
 
   if calculate_total(session[:player_cards]) == BLACKJACK
-    winner!("You hit blackjack!")
     redirect '/game/dealer'
   end
 
