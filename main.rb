@@ -140,7 +140,7 @@ post '/game/player/hit' do
     redirect '/game/dealer'
   end
   
-  erb :game
+  erb :game, layout: false
 end
 
 post '/game/player/stay' do

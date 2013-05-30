@@ -1,70 +1,72 @@
-<div class="row-fluid">
-	<div class="span2">
-    <img src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRlhT0hwkrhRMYj7bAvpq7whCLLvQyy5t0OqsRBDuizSVSUfCkE" class="img-circle">
-  </div>
-  <div class="span10">
-    <h1>Goodluck <%= session[:player_name] %>!</h1>
-    <p>Bankroll: <%= session[:player_pot] %> | Current bet: <%= session[:bet_amount] %></p>
-  </div>
-</div>
-<br>
-<div class="row-fluid">
-  <div class="card-table span5 offset1">
-    <h4 class="table">Dealer Cards</h4>
-    <% session[:dealer_cards].each_with_index do |card, i| %>
-      <% if session[:turn] != "dealer" && i == 0 %>
-        <img class="card-image" src="/images/cards2/cover.png">
-      <% else %>
-        <%= card_image(card) %>
-      <% end %>
-    <% end %>
-  </div>
-  <div class="card-table span5">
-    <h4 class="table"><%= session[:player_name] %>'s Cards | Total Value: <%= calculate_total(session[:player_cards]) %></h4>
-      <% session[:player_cards].each do |card| %>
-        <%= card_image(card) %>
-      <% end %>
-  </div>
-</div>
-<br>
-
-<% if @player_buttons %>
-<div class="row-fluid">
-    <h3>What would you like to do?</h3>
-    <div class="span5 offset1">
-      <form action="/game/player/hit" method="post">
-        <button class="btn btn-success btn-block" type="submit">HIT</button>
-      </form>
-    </div>
-    <div class="span5">
-      <form action="/game/player/stay" method="post">
-        <button class="btn btn-danger btn-block" type="submit">STAY</button>
-      </form>
-    </div>
-</div>
-<% end %>
-
-<% if @next_round %>
-<div class="row-fluid">
-    <h3>Would you like to play again?</h3>
-    <div class="span4 offset2">
-      <form action="/bet" method="get">
-        <button class="btn btn btn-block" type="submit">YES</button>
-      </form>
-    </div>
-    <div class="span4">
-      <form action="/game_over" method="get">
-        <button class="btn btn btn-block" type="submit">NO</button>
-      </form>
-    </div>
-</div>
-<% end %>
-
-<% if @dealer_buttons %>
+<div id="game">
   <div class="row-fluid">
-    <h3>Dealer has <%= calculate_total(session[:dealer_cards]) %></h3>
-      <form action="/game/dealer/hit" method="post">
-        <input class="btn btn-primary" type="submit" value="Click to see dealer card &rarr;">
-      </form>
+  	<div class="span2">
+      <img src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRlhT0hwkrhRMYj7bAvpq7whCLLvQyy5t0OqsRBDuizSVSUfCkE" class="img-circle">
+    </div>
+    <div class="span10">
+      <h1>Goodluck <%= session[:player_name] %>!</h1>
+      <p>Bankroll: $<%= session[:player_pot] %> | Current bet: $<%= session[:bet_amount] %></p>
+    </div>
   </div>
-<% end %>
+  <br>
+  <div class="row-fluid">
+    <div class="card-table span5 offset1">
+      <h4 class="table">Dealer Cards</h4>
+      <% session[:dealer_cards].each_with_index do |card, i| %>
+        <% if session[:turn] != "dealer" && i == 0 %>
+          <img class="card-image" src="/images/cards2/cover.png">
+        <% else %>
+          <%= card_image(card) %>
+        <% end %>
+      <% end %>
+    </div>
+    <div class="card-table span5">
+      <h4 class="table"><%= session[:player_name] %>'s Cards | Total Value: <%= calculate_total(session[:player_cards]) %></h4>
+        <% session[:player_cards].each do |card| %>
+          <%= card_image(card) %>
+        <% end %>
+    </div>
+  </div>
+  <br>
+
+  <% if @player_buttons %>
+  <div class="row-fluid">
+      <h3>What would you like to do?</h3>
+      <div class="span5 offset1">
+        <form id="hit_form" action="/game/player/hit" method="post">
+          <button class="btn btn-success btn-block" type="submit">HIT</button>
+        </form>
+      </div>
+      <div class="span5">
+        <form id="stay_form" action="/game/player/stay" method="post">
+          <button class="btn btn-danger btn-block" type="submit">STAY</button>
+        </form>
+      </div>
+  </div>
+  <% end %>
+
+  <% if @next_round %>
+  <div class="row-fluid">
+      <h3>Would you like to play again?</h3>
+      <div class="span4 offset2">
+        <form action="/bet" method="get">
+          <button class="btn btn btn-block" type="submit">YES</button>
+        </form>
+      </div>
+      <div class="span4">
+        <form action="/game_over" method="get">
+          <button class="btn btn btn-block" type="submit">NO</button>
+        </form>
+      </div>
+  </div>
+  <% end %>
+
+  <% if @dealer_buttons %>
+    <div class="row-fluid">
+      <h3>Dealer has <%= calculate_total(session[:dealer_cards]) %></h3>
+        <form action="/game/dealer/hit" method="post">
+          <input class="btn btn-primary" type="submit" value="Click to see dealer card &rarr;">
+        </form>
+    </div>
+  <% end %>
+</div>
