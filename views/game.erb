@@ -1,4 +1,10 @@
 <div id="game">
+  <% if @loser %>
+      <div class="alert alert-error"><%=@loser%></div>
+  <% end %>
+  <% if @winner %>
+      <div class="alert alert-success"><%=@winner%></div>
+  <% end %>
   <div class="row-fluid">
   	<div class="span2">
       <img src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRlhT0hwkrhRMYj7bAvpq7whCLLvQyy5t0OqsRBDuizSVSUfCkE" class="img-circle">
@@ -64,7 +70,7 @@
   <% if @dealer_buttons %>
     <div class="row-fluid">
       <h3>Dealer has <%= calculate_total(session[:dealer_cards]) %></h3>
-        <form action="/game/dealer/hit" method="post">
+        <form id="dealer_hit" action="/game/dealer/hit" method="post">
           <input class="btn btn-primary" type="submit" value="Click to see dealer card &rarr;">
         </form>
     </div>

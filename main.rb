@@ -41,21 +41,21 @@ helpers do
 
   def winner!(msg)
     @player_buttons = false
-    @success = "<strong>Congratulations, #{session[:player_name]} wins.</strong> #{msg}"
+    @winner = "<strong>Congratulations, #{session[:player_name]} wins.</strong> #{msg}"
     @next_round = true
     session[:player_pot] = session[:player_pot] + session[:bet_amount]
   end
 
   def loser!(msg)
     @player_buttons = false
-    @error = "<strong>Sorry, #{session[:player_name]} loses.</strong> #{msg}"
+    @loser = "<strong>Sorry, #{session[:player_name]} loses.</strong> #{msg}"
     @next_round = true
     session[:player_pot] = session[:player_pot] - session[:bet_amount]
   end
 
   def push!(msg)
     @player_buttons = false
-    @error = "<strong>It's a push.</strong> #{msg}"
+    @loser = "<strong>It's a push.</strong> #{msg}"
     @next_round = true
   end
 end
@@ -159,7 +159,7 @@ get '/game/dealer' do
   end
 
   @dealer_buttons = true
-  erb :game
+  erb :game, layout: false
 end
 
 post '/game/dealer/hit' do
@@ -183,7 +183,7 @@ get '/game/compare' do
     push!("Dealer and #{session[:player_name]} both have #{player_total}.")
   end
 
-  erb :game
+  erb :game, layout: false
 end
 
 get '/game_over' do
