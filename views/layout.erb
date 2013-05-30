@@ -12,9 +12,14 @@
       <div class="navbar-inner">
         <div class="navbar-fixed">
           <a class="brand">Simple Blackjack</a>
+        <div class="pull-left">
+          <a href="/bet" class="btn">Change Bet: ($<%= session[:bet_amount] %>)</a>
+        </div>
         <div class="pull-right">
           <a href="/form" class="btn btn-primary">Enter Name</a>
-          <a href="/bet" class="btn btn-primary">Deal Again</a>
+          <% if session[:player_name] %>
+          <a href="/game" class="btn btn-primary">Deal Again</a>
+          <% end %>
         </div>
       </div>
       </div>

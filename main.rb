@@ -112,6 +112,10 @@ get '/game' do
     redirect '/form'
   end
 
+  if session[:bet_amount].nil?
+    redirect '/bet'
+  end
+
   # deck
   suits = ['H', 'D', 'C', 'S']
   values = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "jack", "queen", "king", "ace"] 
@@ -140,7 +144,7 @@ post '/game/player/hit' do
     redirect '/game/dealer'
   end
   
-  erb :game, layout: false
+  erb :game, :layout => !request.xhr?
 end
 
 post '/game/player/stay' do
@@ -159,7 +163,7 @@ get '/game/dealer' do
   end
 
   @dealer_buttons = true
-  erb :game, layout: false
+  erb :game, :layout => !request.xhr?
 end
 
 post '/game/dealer/hit' do
@@ -183,7 +187,7 @@ get '/game/compare' do
     push!("Dealer and #{session[:player_name]} both have #{player_total}.")
   end
 
-  erb :game, layout: false
+  erb :game, :layout => !request.xhr?
 end
 
 get '/game_over' do

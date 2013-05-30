@@ -13,8 +13,11 @@
   <form class="form-inline" action="/bet" method="post">
     <fieldset class="span6 offset3">
       <legend>Max bet: $<%= session[:player_pot] %></legend>
-          <input type="text" name="bet_amount" placeholder="Place your bet please">
-          <button type="submit" class="btn btn-primary">Place Bet</button>
+          <button type="submit" class="btn span2" name="bet_amount" value="10">$10</button>
+          <button type="submit" class="btn span2" name="bet_amount" value="25">$25</button>
+          <button type="submit" class="btn span2" name="bet_amount" value="50">$50</button>
+          <button type="submit" class="btn span2" name="bet_amount" value="100">$100</button>
+          <button type="submit" class="btn span2" name="bet_amount" value="250">$250</button>
     </fieldset>
   </form>
 </div>
