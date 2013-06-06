@@ -77,6 +77,11 @@ get '/form' do
   erb :form
 end
 
+get '/about' do
+  erb :about
+  end
+
+
 post '/form' do
   if params[:player_name].empty?
       @error = "You must enter a name!"
